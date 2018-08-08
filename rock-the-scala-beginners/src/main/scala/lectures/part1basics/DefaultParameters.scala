@@ -5,11 +5,11 @@ import scala.annotation.tailrec
 object DefaultParameters extends App {
 
   /**
-    * This simple function print the name and age of your preferred
+    * This simple function prints the name and age of your preferred
     * hero.
     *
-    * The parameters use a default value that is used if no value is
-    * passed in the call
+    * The parameter applies a default value only if no value is passed in
+    * the call
     *
     * @param name
     * @param age
@@ -28,7 +28,8 @@ object DefaultParameters extends App {
   greet(age=30, name="Antman") // in any order you prefer
 
   /**
-    * Revisited fibonacci function using the default values
+    * Revisited fibonacci function so that now uses the default values
+    * in place of recursive function inside
     *
     * @param n - is the number for which you want to calculate the fibonacci
     * @param last - f(n-1) calculated value
@@ -41,6 +42,6 @@ object DefaultParameters extends App {
       else fib(n - 1, last + previous, last)
   }
 
-  println(s"Fibonacci ${fib(8)}")
+  println(s"Fibonacci ${fib(100)}")
 
 }
