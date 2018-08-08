@@ -31,11 +31,11 @@ object Functions extends App {
   println(aRecursiveFunction("Hello ", 10))
 
 
-  // Factorial function => f(n)=1 * 2 * 3 * ... * n
-  // e.g. f(3) = 1 * 2 * 3
+  // Factorial function => n!=1 * 2 * 3 * ... * n => n!=n*(n-1)!
+  // e.g. 3! = 1 * 2 * 3
   def factorial(n:Int): Int = {
-    if (n<=0) 1
-    else n * factorial(n-1)
+    if (n<=1) 1 // terminating condition
+    else n * factorial(n-1) //recursive call
   }
 
   println(factorial(10))
@@ -45,14 +45,18 @@ object Functions extends App {
   // f(1)=f(2)=1
   // f(n) = f(n-1)+f(n-2)
   // In scala the recommended way to solve problems is through recursive programming model rather
-  // than imperative programming
+  // than imperative programming. Although it is very important to take care of the fact that the
+  // recursion typically demands a lot of memory capacity and processor activity. For example the
+  // below function needs a lot of memory and cpu processing as soon as n becomes relatively high.
+  // See the Recursion scala object to rewrite the function so that we don't complain with those
+  // issues.
 
   def fibonacci(n:Int): Int={
     if (n<=2) 1 else
       fibonacci(n-1) + fibonacci(n-2)
   }
 
-  println(fibonacci(8))
+  println(fibonacci(10))
 
 
   /*
@@ -61,8 +65,8 @@ object Functions extends App {
      can be divided by 1 and itself only
    */
   def isPrime(n: Int): Boolean = {
-    // inner function to find at least a number for which n can be divided
-    // that is different from 1 and itself
+    // inner function to find at least a number that n can be divided by
+    // and that is != 1 && n
     def isPrimeUntil(t: Int): Boolean = {
       println(t)
       if (t<=1) true
@@ -71,8 +75,8 @@ object Functions extends App {
     isPrimeUntil(n/2)
   }
 
-  println(isPrime(2))
-  println(isPrime(5))
-  println(isPrime(9))
-  println(isPrime(37))
+  println(isPrime(2))   // => 2 is prime
+  println(isPrime(5))   // => 5 is prime
+  println(isPrime(9))   // => 9 is not prime
+  println(isPrime(37))  // => 37 is prime
 }
