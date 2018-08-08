@@ -53,12 +53,51 @@ object Recursion extends App {
 
   println(factorialWithAccumulator(10))
 
-  def fibonacci(n: Int): BigInt ={
-    def fibHelper(m: Int, accumulator: BigInt): BigInt =
-      if (m<=2) accumulator
-      else fibHelper(m-1, m + accumulator)
+  /*
+    As said, take care to create a dependency between a local variable and recursive function invocation otherwise the
+    program will complain with too many stack frames allocated in memory. The best approach in writing the recursion is
+    to put all the variables as parameters of the recursive method and accumulate the value in intermediate variable.
+    Even though this will complicate a little bit the algorithm and the clarity of the code but as benefit does not
+    break the program execution achieving better performance for big number of recursions.
 
-    fibHelper(5,1)
+    f(1)=f(2)=1
+    f(n)=f(n-1)+f(n-2)
+    => f(3)=f(2)+f(1)=2
+    => f(4)=f(3)+f(2)=3
+    => f(5)=f(4)+f(3)=5
+    => f(6)=f(5)+f(4)=8
+    => f(7)=f(6)+f(5)=13
+    => f(8)=f(7)+f(6)=21
+    ...
+
+    fib(1,1,1) n = 1 => m = 1 => fib = 1
+    fib(2,1,1) n = 2 => m = 2 => fib = 1
+    fib(3,1,1) n = 3
+      1) m = 3, last=1, prev=1
+      2) m = 2, last=2, prev=1  => fib = 2
+    fib(4,1,1) n=4
+      1) m = 4, last=1, prev=1
+      2) m = 3, last=2, prev=1
+      3) m = 2, last=3, prev=2 => fib=3
+    fib(5,1,1) n=5
+      1) m = 5, last=1, prev=1
+      2) m = 4, last=2, prev=1
+      3) m = 3, last=3, prev=2
+      49 m = 2, last=5, prev=3
+
+   */
+  def fibonacci(n: Int): BigInt ={
+    def fibHelper(m: Int, last: BigInt, previous: BigInt): BigInt = {
+      if (m <= 2) last
+      else fibHelper(m - 1, last + previous, last)
+    }
+    fibHelper(n,1,1)
   }
 
+  println(fibonacci(1))   // => 1
+  println(fibonacci(2))   // => 1
+  println(fibonacci(100)) // => 354224848179261915075 look at http://www.readme.it/libri/M/M00101.shtml
+  println(fibonacci(1000))// => 43...8875
+
+  // see how to write test unit in scala can useful to verify the assertions for the method
 }
