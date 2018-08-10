@@ -10,6 +10,8 @@ object SyntacticSugar extends App {
     * One of common syntatic sugar is the operator overloading that's rewrite the behavior of common operators
     * or design a new one
     *
+    * Prefix, infix and postfix notations are another examples
+    *
     * @param name - Person name
     * @param movie - Favorite movie
     */
@@ -23,20 +25,30 @@ object SyntacticSugar extends App {
     def +(nickname: String): Person = new Person(s"$name $nickname",age,movie)
 
     /**
-      * create a unary prefix operator
+      * create a unary prefix operator only applicable to (+, -, !, ~)
       * @return
       */
     def unary_+()=new Person(name,age+1,movie)
 
     /**
-      * Create a postfix notation
+      * Create an infix notation
       * @param topic
       * @return
       */
     def learns(topic: String): String = s"$name learns $topic"
 
+    /**
+      * Create a postfix notation
+      * @return
+      */
     def learnsScala:String = learns("Scala")
 
+    /**
+      * Special method that allows to call the object as method
+      *
+      * @param n
+      * @return
+      */
     def apply(n: Int): String = s"$name watched the $movie $n times"
 
   }
@@ -46,7 +58,6 @@ object SyntacticSugar extends App {
   val john_nickname= john + "the master"
 
   println(john_nickname.name)
-
 
   println((+john).age)
 
