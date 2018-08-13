@@ -87,6 +87,7 @@ object Recursion extends App {
 
    */
   def fibonacci(n: Int): BigInt ={
+    @tailrec
     def fibHelper(m: Int, last: BigInt, previous: BigInt): BigInt = {
       if (m <= 2) last
       else fibHelper(m - 1, last + previous, last)
