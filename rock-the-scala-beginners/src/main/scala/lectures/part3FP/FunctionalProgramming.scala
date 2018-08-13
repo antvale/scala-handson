@@ -2,7 +2,38 @@ package lectures.part3FP
 
 object FunctionalProgramming extends App{
 
-  // Anonymous class implementing the trait declared below
+  /**
+    * In oop world to create a function you would implement a class declaring basically
+    * a method that takes one or more generic types and returns a generic type.
+    * This allows to implement function that will take one or more input parameter.
+    *
+    * In scala you can code in functional way through either implementing a trait with the
+    * apply method or using the built-in functions scala comes with. Below the trait to
+    * to implement function using the standard object oriented approach and calling the class
+    * as a method (this is possible thanks to the apply method)
+    *
+    * @tparam A - input parameter
+    * @tparam B - output parameter
+    */
+  trait MyFunction1[A, B] {
+    def apply(element: A): B
+  }
+
+  /**
+    * As above but taking 2 generic params
+    * @tparam A
+    * @tparam B
+    * @tparam C
+    */
+  trait MyFunction2[A, B, C] {
+    def apply(element1: A, element2: B): C
+  }
+
+  class PlusOne extends MyFunction1[Int,Int]{
+    override def apply(element: Int): Int = element + 1
+  }
+
+  // Anonymous class implementing the trait declared above
   val doubler = new MyFunction1[Int, Int]{
     override def apply(element:Int):Int = element * 2
   }
@@ -18,7 +49,7 @@ object FunctionalProgramming extends App{
 
   println(s"Concater: ${helloWorld}")
 
-  // SCALA FUNCTION OUT OF THE BOX
+  // SCALA FUNCTIONS OUT OF THE BOX
 
   /**
     * This is a way to create a function using the out of the box set of function
@@ -31,13 +62,26 @@ object FunctionalProgramming extends App{
   println("Converter string -> int: " + (stringToIntConverter("4") + 3))
 
   // ALL FUNCTIONS IN SCALA ARE OBJECTS
+
   val adder: ((Int,Int)=>Int) = new Function2[Int,Int,Int] {
     override def apply(x: Int, y: Int): Int = x + y
   }
 
   println("Adder: "+ adder(3,4))
 
-  // NEW ADDER VERSION WITH SYNTACTIC SUGAR SAID ANONYMOUS FUNCTION OR LAMBDA
+  // HIGH ORDER FUNCTIONS, THAT'S, FUNCTION OF FUNCTIONS or FUNCTIONS THAT RETURN FUNCTION/S
+
+  val f_f:(Int => Function1[Int,Int])=new Function[Int,Function1[Int,Int]] {
+    override def apply(x: Int): Function1[Int,Int] = new Function1[Int,Int]{
+      override def apply(y: Int): Int = x + y
+    }
+  }
+
+  val f=f_f(4)
+
+  println(s"Function of functions ${f(2)}")
+
+  // NEW ADDER VERSION WITH SYNTACTIC SUGAR CALLED ANONYMOUS FUNCTION OR LAMBDA
   // (param1: Type1, param2:Type2,...paramN:TypeN) => expression based on parameters
 
   val adder1 = (x: Int, y:Int) => x + y
@@ -57,18 +101,6 @@ object FunctionalProgramming extends App{
 
   println(s"Adder3 with lambda: ${adder3(3,4)}")
 
-  //HIGH ORDER FUNCTIONS THAT'S FUNCTION OF FUNCTIONS or FUNCTIONS THAT RETURN FUNCTION/S
-
-  val f_f:(Int => Function1[Int,Int])=new Function[Int,Function1[Int,Int]] {
-    override def apply(x: Int): Function1[Int,Int] = new Function1[Int,Int]{
-      override def apply(y: Int): Int = x + y
-    }
-  }
-
-  val f=f_f(4)
-
-  println(s"Function of functions ${f(2)}")
-
 
   // LAMBDA VERSION OF f_f
   val f_f1 = (x:Int) => (y:Int) => x + y
@@ -79,33 +111,3 @@ object FunctionalProgramming extends App{
 
 }
 
-/**
-  * In oop world to create a function you would implement a class declaring basically
-  * a method that takes a generic type and returns a generic type. This to do function
-  * that will take one input paremeter.
-  *
-  * In scala you can code in functional way through either implementing a trait with the
-  * apply method or using the built-in functions scala comes with. Below the trait to
-  * to implement function using the standard object oriented approach and calling the class
-  * as a method (this is possible thanks to the apply method)
-  *
-  * @tparam A - input parameter
-  * @tparam B - output parameter
-  */
-trait MyFunction1[A, B] {
-  def apply(element: A): B
-}
-
-/**
-  * As above but taking 2 generic params
-  * @tparam A
-  * @tparam B
-  * @tparam C
-  */
-trait MyFunction2[A, B, C] {
-  def apply(element1: A, element2: B): C
-}
-
-class PlusOne extends MyFunction1[Int,Int]{
-  override def apply(element: Int): Int = element + 1
-}
