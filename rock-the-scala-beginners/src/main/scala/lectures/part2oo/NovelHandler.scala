@@ -5,6 +5,9 @@ object NovelHandler extends App {
   /**
     * Class representing an author of one or more novels
     *
+    * If you need to invoke the constructor params also as fields than you have to prefix the params
+    * with 'val' for immutable fields and 'var' for those you need change
+    *
     * @param firstName
     * @param surname
     * @param year - Year of birth
@@ -35,7 +38,7 @@ object NovelHandler extends App {
 
     def isWrittenBy(author: Writer): Boolean = author == this.author
 
-    //def this(releaseYear: Int) = this(name,releaseYear,author)
+    //     def this(releaseYear: Int) = this(this.name,releaseYear,author)
 
     def copy(newReleaseYear: Int): Novel = new Novel(name,newReleaseYear,author)
   }
@@ -45,7 +48,7 @@ object NovelHandler extends App {
     * the counter field is never changed indeed it is actually a val. Instead for each increment
     * or decrement a new Counter object is created.
     *
-    * @param counter
+    * @param counter - counter that will be increased and decreased starting from default value
     */
   class Counter(val counter: Int = 0) {
 
@@ -58,7 +61,6 @@ object NovelHandler extends App {
     def inc(amount: Int) = new Counter(counter+amount)
 
     def dec(amount: Int): Counter = new Counter(counter-amount)
-
 
   }
 
