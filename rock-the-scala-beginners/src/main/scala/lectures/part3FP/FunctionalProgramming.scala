@@ -105,9 +105,17 @@ object FunctionalProgramming extends App{
   // LAMBDA VERSION OF f_f
   val f_f1 = (x:Int) => (y:Int) => x + y
 
+  val f_f2:(Int)=>(Int=>Int) = (x:Int) => (y:Int) => x + y
+
   val g=f_f1(4)(2)
 
   println(s"Function of functions ${g}")
+
+  // f(x,z) = x + z where z=g(y) => f(x,y)= x + g(y) where g(y)=y
+  // suppose g(y)=y*2
+  val f_x_y = (x:Int) => (y:Int) => x + (y * 2)
+
+  println(s"Composed function: ${f_x_y(2)(3)}")
 
 }
 
