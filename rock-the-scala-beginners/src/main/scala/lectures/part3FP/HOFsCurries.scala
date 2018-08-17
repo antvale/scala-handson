@@ -38,9 +38,11 @@ object HOFsCurries extends App {
   println(s"Apply 3 times the function plusOne to x: ${nTimes(plusOne, 3, 1)}")
 
   /**
-    * Rethought nTimes function so that the function send as parameter is applied
+    * Rethought of nTimes function so that the function sent as parameter is applied
     * only when required.
-    * The technique used to code this function nTimesBetter is called "Curried"
+    * The technique used to code the function nTimesBetter is called "Curried"
+    *
+    * The nTimesBetter should be further improved because it is not tailrec
     *
     * @param f
     * @param n
@@ -55,5 +57,28 @@ object HOFsCurries extends App {
 
   // now the function plus10 is applied
   println(s"Increment 3 by 10 ${plus10(3)}")
+
+  /**
+    * Simple function with multiple parameter list that basically take one paramenter (string)
+    * and delegate the second param (double) to be implemented later by an outside function
+    *
+    * @param c - format to be applied to the second parameter
+    * @param x - double to format in string
+    * @return
+    */
+  def curriedFormatter(c:String)(x:Double): String = c.format(x)
+
+  /**
+    * Declare a function that returns in turn a function that given a double returns a formatted string
+    * @return
+    */
+  def standardFormat: (Double => String)= curriedFormatter("%4.2f")
+
+  def preciseFormat: (Double => String)= curriedFormatter("%10.8f")
+
+  println(s"Standard formatter ${standardFormat(Math.PI)}")
+  println(s"Standard formatter ${preciseFormat(Math.PI)}")
+
+
 
 }
