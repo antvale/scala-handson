@@ -74,7 +74,7 @@ object HOFsCurries extends App {
     */
   def standardFormat: (Double => String)= curriedFormatter("%4.2f")
 
-  def preciseFormat: (Double => String)= curriedFormatter("%10.8f")
+  def preciseFormat: (Double => String)= curriedFormatter("%10.6f")
 
   println(s"Standard formatter ${standardFormat(Math.PI)}")
   println(s"Standard formatter ${preciseFormat(Math.PI)}")
