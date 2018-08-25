@@ -3,8 +3,11 @@ package exercises
 /**
   * Abstract class to handle a list. The list is a immutable list so
   * a new list is created every time is required.
+  *
+  * The list is a generic list
+  *
   */
-abstract class MyList {
+abstract class MyList [+A]{
 
   /*
 
@@ -17,15 +20,43 @@ abstract class MyList {
     1. define the signature for each one above methods
     2. implement each method
 
+    Add the generic type to mylist to manage any kind of
+    type.
+
+    Add the map, filter and flapMap to mylist to apply
+    specific behavior to the list
+
    */
 
-  def head: Int
-  def tail: MyList
+  def head: A
+  def tail: MyList[A]
   def isEmpty: Boolean
-  def add(elem:Int): MyList //immutable principle
+  def add[B >: A](elem:B): MyList[B] //immutable principle
   def printElems: String
   override def toString: String = "[" + printElems + "]"
 
+  /**
+    * map transforms list of type A to a list of type B applying
+    * the specific transformer
+    *
+    * @param transform - transform function
+    * @tparam B - the new list type
+    * @return - a new list
+    */
+  def map[B](transform:MyTransformer[A,B]): MyList[B]
+
+  //def flatMap[B](transform:MyTransformer[A,MyList[B]]): MyList[B]
+
+  def filter(predicate:MyPredicate[A]): MyList[A]
+
+}
+
+trait MyPredicate[-T] {
+  def test(elem:T): Boolean
+}
+
+trait MyTransformer[-A, B]{
+  def transform(elem:A):B
 }
 
 /**
@@ -37,26 +68,41 @@ abstract class MyList {
   * other developers
   *
   */
-object Empty extends MyList {
+object Empty extends MyList[Nothing] {
 
-  def head: Int = throw new NoSuchElementException
-  def tail: MyList = throw new NoSuchElementException
+  def head: Nothing = throw new NoSuchElementException
+  def tail: MyList[Nothing] = throw new NoSuchElementException
   def isEmpty: Boolean = true
-  def add(elem:Int): MyList = new Cons(elem, Empty)
+  def add[B >: Nothing](elem:B): MyList[B] = new Cons(elem, Empty)
   def printElems: String = "[]"
+
+  def map[B](transform: MyTransformer[Nothing, B]): MyList[B] = Empty
+
+  //override def flatMap[B](transform: MyTransformer[Nothing, MyList[B]]): MyList[B] = Empty
+
+  override def filter(predicate: MyPredicate[Nothing]): MyList[Nothing] = Empty
 }
+
 
 /**
   * A non empty list so contains at least an element
   * @param h - the head of the list (that's the latest added element)
   * @param t - the tail of the list
   */
-class Cons(h:Int,t: MyList) extends MyList {
+class Cons[+A](h:A,t: MyList[A]) extends MyList[A] {
 
-  def head: Int = h
-  def tail: MyList = t
+  def head: A = h
+  def tail: MyList[A] = t
   def isEmpty: Boolean = false
-  def add(elem:Int): MyList = new Cons(elem,this)
+  def add[B >: Nothing](elem:B): MyList[B] = new Cons(elem, Empty)
+
+  override def map[B](transformer: MyTransformer[A, B]): MyList[B] =
+    new Cons(transformer.transform(h), t.map(transformer))
+
+  override def filter(predicate: MyPredicate[A]): MyList[A] = {
+    if (predicate.test(h)) new Cons(h,t.filter(predicate))
+    else t.filter(predicate)
+  }
 
   /**
     * This is recursive method. To print an entire list you
@@ -71,7 +117,7 @@ class Cons(h:Int,t: MyList) extends MyList {
     else h + " " + t.printElems
 }
 
-object TestList extends App{
+object TestList {
   val list= new Cons(1,Empty)
 
   println(s"The head element of the list is: ${list.head}")
